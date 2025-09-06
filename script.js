@@ -1,4 +1,4 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycby4FP8xMqfzXEj2-feuMV1mU0efNc8rasNtzzJl3Cw3ItGzh90bhjsslwPAH7HJqqQe/exec'; // ganti dengan milik Anda
+const scriptURL = 'https://script.google.com/macros/s/AKfycbwccja7nouu78V-oS4IViRqEkqeMK0f78KlluLHIBI5FO_QfWtwZpKTkyYbY9P69Acn/exec'; // ganti dengan milik Anda
 
 // ---------- VALIDASI NOMOR TELEPON INDONESIA ----------
 const notelp = document.getElementById('notelp');
@@ -102,4 +102,5 @@ document.getElementById('formRegistrasi').addEventListener('submit', function (e
 });
 
 // ---------- REFRESH ----------
+
 document.getElementById('btnInputKembali').addEventListener('click', () => location.reload());
