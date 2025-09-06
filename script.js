@@ -1,4 +1,4 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycbxVFjOG6KQ3ya--uQ5FMRxfLUcVo9U5NB4ls6i3U3hM2HLHQDvEOuYN3FMwfOWVk00rzQ/exec'; // GANTI DENGAN URL ANDA
+const scriptURL = 'https://script.google.com/macros/s/AKfycbx1H66Kj-c7fF6sBqcCT4AAMGfNjazl3_TGrahnIwHiKQOtn3txv1Oh0V7DSKvV3F7K/exec'; // GANTI DENGAN URL ANDA
 
 /* ---------- VALIDASI NOTELP ---------- */
 const notelp = document.getElementById('notelp');
@@ -225,3 +225,4 @@ document.getElementById('scanNikBtn').addEventListener('click', async () => {
     }).catch(err => alert('OCR gagal: ' + err));
   };
 });
+
