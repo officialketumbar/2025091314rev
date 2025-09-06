@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registrasi Ulang Simposium</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="container">
+    <h3>Registrasi Ulang</h3>
+
+    <!-- Form -->
+    <form id="formRegistrasi">
+      <label>No. Telepon:</label>
+      <input type="text" name="notelp" id="notelp" required autocomplete="off"/>
+      <div id="notelpError" class="error-box">Nomor telepon tidak valid (contoh: 081234567890)</div>
+      <button type="button" id="cekNotelpBtn">Cek No Telp</button>
+
+      <!-- Pesan jika sudah pernah registrasi ulang -->
+      <div id="alreadyDone" class="blink-hijau hidden">
+        TELAH REGISTRASI ULANG (Telah Terima Symposium Kit [E-Toll])
+      </div>
+
+      <!-- Data peserta -->
+      <div id="dataBox" class="hidden">
+        <p class="blink-hijau">Data ditemukan. Silakan lanjutkan jika ingin memperbarui.</p>
+
+        <label>Nama Lengkap:</label>
+        <input type="text" name="nama" id="nama" required/>
+
+        <label>Instansi:</label>
+        <input type="text" name="instansi" id="instansi" required/>
+
+        <label>Email:</label>
+        <input type="email" name="email" id="email" required/>
+
+        <label>NIK:</label>
+        <input type="text" name="nik" id="nik" maxlength="16" pattern="\d{16}" title="16 digit angka" required/>
+
+        <label>Profesi:</label>
+        <input type="text" name="profesi" id="profesi" required/>
+
+        <!-- Field baru -->
+        <label>Keterangan:</label>
+        <input type="text" name="keterangan" id="keterangan" readonly/>
+      </div>
+
+      <!-- Tombol Submit -->
+      <button type="submit" id="submitBtn" class="hidden">S U B M I T</button>
+      <button type="button" id="btnInputKembali">Refresh</button>
+
+      <!-- Progress & pesan sukses -->
+      <div id="progressWrap" style="display:none;margin-top:10px">
+        <div id="progressBar"></div>
+      </div>
+      <div id="msgSukses" class="blink-hijau" style="display:none;margin-top:10px">
+        DATA BERHASIL DISIMPAN
+      </div>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
