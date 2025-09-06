@@ -1,6 +1,7 @@
 :root {
   --warna-utama: #007BFF;
   --warna-gelap: #0056b3;
+  --warna-merah: #dc3545;
 }
 
 body {
@@ -12,22 +13,23 @@ body {
 
 .container {
   width: 90%;
-  max-width: 480px;
-  margin: 20px auto;
+  max-width: 95%;
+  margin: 0 auto;
   background: #fff;
   padding: 20px;
   border-radius: 15px;
+  box-shadow: none !important;
 }
 
-input, button {
+input, button, select {
   width: 100%;
   padding: 10px;
-  margin: 6px 0;
+  margin: 0;
   box-sizing: border-box;
 }
 
-input {
-  box-shadow: inset 0 1px 3px rgba(128,128,128,.35);
+input, select {
+  box-shadow: inset 0 1px 3px rgba(128, 128, 128, 0.35);
   border: 1px solid #ccc;
   border-radius: 1px;
 }
@@ -39,28 +41,41 @@ button {
   cursor: pointer;
   transition: background .2s ease-in-out;
 }
+
 button:hover, button:focus {
   background: var(--warna-gelap);
 }
+
 button:focus {
   outline: 2px solid var(--warna-gelap);
   outline-offset: 2px;
 }
 
-.error-box {
-  color: #dc3545;
-  font-size: 13px;
-  margin-top: 2px;
-  display: none;
+button:disabled {
+  background: #ccc !important;
+  cursor: not-allowed !important;
+}
+
+#scanNikBtn {
+  margin-top: 6px;
 }
 
 .hidden {
-  display: none !important;
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
 }
 
 .blink-hijau {
   color: #28a745;
   animation: blink 1.2s infinite;
+}
+
+.blink-merah {
+  color: var(--warna-merah);
+  animation: blink 1.2s infinite;
+  font-weight: bold;
+  margin: 10px 0;
 }
 
 @keyframes blink {
@@ -75,6 +90,7 @@ button:focus {
   border-radius: 4px;
   overflow: hidden;
 }
+
 #progressBar {
   height: 100%;
   width: 0%;
