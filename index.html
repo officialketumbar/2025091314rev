@@ -39,7 +39,6 @@
       <div id="nikError" style="color:#dc3545;font-size:13px;margin-top:2px;display:none">
         Jumlah digit harus 16 digit
       </div>
-      <button type="button" id="scanNikBtn">📷 Scan NIK via Kamera</button>
 
       <label>Profesi:</label>
       <input type="text" name="profesi" id="profesi" required/>
@@ -63,12 +62,9 @@
     <p id="status"></p>
   </div>
 
-  <canvas id="canvas" style="display:none;"></canvas>
-  <div id="previewWrap" style="display:none;text-align:center;margin-top:8px">
-    <canvas id="cropCanvas" style="max-width:100%;border:1px solid #ccc"></canvas><br>
-    <button id="useBtn">✅ Pakai NIK ini</button>
-    <button id="retakeBtn">📷 Ulangi</button>
-  </div>
+  <!-- SEMUA ELEMEN KAMERA & CANVAS DIHAPUS -->
+  <!-- <canvas id="canvas" style="display:none;"></canvas> -->
+  <!-- <div id="previewWrap" ...>  ...  </div> -->
 
   <script src="script.js"></script>
 </body>
