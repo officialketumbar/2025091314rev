@@ -1,4 +1,4 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycbx1H66Kj-c7fF6sBqcCT4AAMGfNjazl3_TGrahnIwHiKQOtn3txv1Oh0V7DSKvV3F7K/exec'; // GANTI DENGAN URL ANDA
+const scriptURL = 'https://script.google.com/macros/s/AKfycbxVFjOG6KQ3ya--uQ5FMRxfLUcVo9U5NB4ls6i3U3hM2HLHQDvEOuYN3FMwfOWVk00rzQ/exec'; // GANTI DG URL ANDA
 
 /* ---------- VALIDASI NOTELP ---------- */
 const notelp = document.getElementById('notelp');
@@ -10,7 +10,6 @@ function cekNoTelp() {
     notelpError.style.display = 'none';
     return;
   }
-  // Validasi format nomor telepon Indonesia
   if (!/^[0-9]{10,15}$/.test(val)) {
     notelpError.style.display = 'block';
   } else {
@@ -45,8 +44,8 @@ document.querySelector('form')?.addEventListener('submit', e => {
   }
 });
 
-/* ---------- CEK NOTELP ---------- */
-function cekNoTelp() {
+/* ---------- CEK NOTELP (UTAMA) ---------- */
+function cekNoTelp() {            // eslint-disable-line no-func-assign
   const notelpVal = notelp.value.trim();
   if (!notelpVal) { 
     alert('Masukkan No Telp dulu.'); 
@@ -56,39 +55,36 @@ function cekNoTelp() {
   fetch(`${scriptURL}?notelp=${notelpVal}`)
     .then(r => r.json())
     .then(data => {
-      const box = document.getElementById('dataLama');
-      const registrasiBox = document.getElementById('telahRegistrasi');
-      const form = document.getElementById('formRegistrasi');
-      const submitBtn = document.getElementById('submitBtn');
-      
+      const box   = document.getElementById('dataLama');
+      const regBox= document.getElementById('telahRegistrasi');
+      const submit= document.getElementById('submitBtn');
+
       if (data.found) {
         box.style.display = 'block';
-        document.getElementById('nama').value = data.nama;
+        document.getElementById('nama').value     = data.nama;
         document.getElementById('instansi').value = data.instansi;
-        document.getElementById('email').value = data.email;
-        document.getElementById('nik').value = data.nik;
-        document.getElementById('notelp').value = data.notelp;
-        document.getElementById('profesi').value = data.profesi;
-        document.getElementById('keterangan').value = data.keterangan;
-        
-        // Cek jika sudah terima kit
+        document.getElementById('email').value    = data.email;
+        document.getElementById('nik').value      = data.nik;
+        document.getElementById('profesi').value  = data.profesi;
+        document.getElementById('keterangan').value= data.keterangan;
+
         if (data.keterangan === 'Telah Terima Symposium Kit (E-Toll)') {
-          registrasiBox.style.display = 'block';
-          submitBtn.disabled = true;
-          submitBtn.style.background = '#ccc';
-          submitBtn.style.cursor = 'not-allowed';
+          regBox.style.display = 'block';
+          submit.disabled = true;
+          submit.style.background = '#ccc';
+          submit.style.cursor = 'not-allowed';
         } else {
-          registrasiBox.style.display = 'none';
-          submitBtn.disabled = false;
-          submitBtn.style.background = '';
-          submitBtn.style.cursor = '';
+          regBox.style.display = 'none';
+          submit.disabled = false;
+          submit.style.background = '';
+          submit.style.cursor = '';
         }
       } else {
-        box.style.display = 'none';
-        registrasiBox.style.display = 'none';
-        submitBtn.disabled = false;
-        submitBtn.style.background = '';
-        submitBtn.style.cursor = '';
+        box.style.display   = 'none';
+        regBox.style.display= 'none';
+        submit.disabled     = false;
+        submit.style.background = '';
+        submit.style.cursor = '';
         alert('Data tidak ditemukan, silakan isi lengkap.');
       }
     })
@@ -102,7 +98,6 @@ function cekNoTelp() {
 document.getElementById('formRegistrasi').addEventListener('submit', function (e) {
   e.preventDefault();
 
-  // Cek apakah sudah terima kit
   const keterangan = document.getElementById('keterangan').value;
   if (keterangan === 'Telah Terima Symposium Kit (E-Toll)') {
     const notelpVal = notelp.value.trim();
@@ -122,8 +117,8 @@ document.getElementById('formRegistrasi').addEventListener('submit', function (e
 
 function prosesSubmit() {
   const wrap = document.getElementById('progressWrap');
-  const bar = document.getElementById('progressBar');
-  const msg = document.getElementById('msgSukses');
+  const bar  = document.getElementById('progressBar');
+  const msg  = document.getElementById('msgSukses');
   wrap.style.display = 'block';
   bar.style.width = '0%';
 
@@ -151,78 +146,9 @@ function prosesSubmit() {
     });
 }
 
-/* ---------- INPUT KEMBALI ---------- */
+/* ---------- REFRESH ---------- */
 document.getElementById('btnInputKembali').addEventListener('click', () => {
   location.reload();
 });
 
-/* ---------- SCAN KTP ---------- */
-document.getElementById('scanNikBtn').addEventListener('click', async () => {
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    alert('Browser tidak support kamera.\nGunakan Chrome/Safari dan pastikan HTTPS.');
-    return;
-  }
-  if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
-    alert('Scan KTP hanya berjalan di HTTPS atau localhost.');
-    return;
-  }
-
-  if (!window.Tesseract) {
-    await import('https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js');
-  }
-
-  let stream;
-  try {
-    stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { exact: 'environment' } }
-    });
-  } catch {
-    stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'user' }
-    });
-  }
-
-  const video = document.createElement('video');
-  video.srcObject = stream;
-  video.playsInline = true;
-  video.play();
-
-  const snapBtn = document.createElement('button');
-  snapBtn.textContent = '📸 Ambil Foto';
-  const wrap = document.createElement('div');
-  Object.assign(wrap.style, {
-    position: 'fixed', inset: 0, zIndex: 9999,
-    background: '#000', display: 'flex',
-    flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
-  });
-  wrap.append(video, snapBtn);
-  document.body.append(wrap);
-
-  snapBtn.onclick = () => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    const maxW = 640;
-    const scale = maxW / video.videoWidth;
-    canvas.width = maxW;
-    canvas.height = video.videoHeight * scale;
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    stream.getTracks().forEach(t => t.stop());
-    wrap.remove();
-
-    Tesseract.recognize(canvas, 'ind', {
-      tessedit_char_whitelist: '0123456789',
-      logger: () => {}
-    }).then(({ data: { text } }) => {
-      const m = text.replace(/\D/g, '').match(/\d{15,17}/);
-      if (m) {
-        const nik = m[0].slice(-16);
-        document.getElementById('nik').value = nik;
-        document.getElementById('nama').focus();
-      } else {
-        alert('Scan ulang…');
-        document.getElementById('scanNikBtn').click();
-      }
-    }).catch(err => alert('OCR gagal: ' + err));
-  };
-});
-
+/* >>> SCAN KTP & TESSERACT SAMA SEKALI DIHAPUS <<< */
