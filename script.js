@@ -2,7 +2,7 @@
    REGISTRASI ULANG SIMPSIUM - VERSI TANPA SCAN KTP
    ========================================================= */
 const scriptURL =
-  'https://script.google.com/macros/s/AKfycbxVFjOG6KQ3ya--uQ5FMRxfLUcVo9U5NB4ls6i3U3hM2HLHQDvEOuYN3FMwfOWVk00rzQ/exec'; // <-- GANTI DG MILIK ANDA
+  'https://script.google.com/macros/s/AKfycbxtqutRPSLGkDuLo8nsfVAFqZ5wN-eifUMFm3z_vtdP6a6FxeQL7s7pXaPb-IG1QtlF/exec'; // <-- GANTI DG MILIK ANDA
 
 /* ---------------------------------------------------------
    1. VALIDASI FORMAT NO-TELEPON (hanya UI, tanpa fetch)
@@ -172,3 +172,4 @@ function kirimData() {
 document.getElementById('btnInputKembali').addEventListener('click', () => {
   location.reload();
 });
+
