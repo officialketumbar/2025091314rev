@@ -1,72 +1,87 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycbxVFjOG6KQ3ya--uQ5FMRxfLUcVo9U5NB4ls6i3U3hM2HLHQDvEOuYN3FMwfOWVk00rzQ/exec'; // GANTI DG URL ANDA
+/* =========================================================
+   REGISTRASI ULANG SIMPSIUM - VERSI TANPA SCAN KTP
+   ========================================================= */
+const scriptURL =
+  'https://script.google.com/macros/s/AKfycbxVFjOG6KQ3ya--uQ5FMRxfLUcVo9U5NB4ls6i3U3hM2HLHQDvEOuYN3FMwfOWVk00rzQ/exec'; // <-- GANTI DG MILIK ANDA
 
-/* ---------- VALIDASI NOTELP ---------- */
-const notelp = document.getElementById('notelp');
+/* ---------------------------------------------------------
+   1. VALIDASI FORMAT NO-TELEPON (hanya UI, tanpa fetch)
+   --------------------------------------------------------- */
+const notelp      = document.getElementById('notelp');
 const notelpError = document.getElementById('notelpError');
 
-function cekNoTelp() {
+function validasiFormatNoTelp() {
   const val = notelp.value.trim();
-  if (val.length === 0) {
+  if (!val) {                         // kosong diperbolehkan
     notelpError.style.display = 'none';
-    return;
+    return true;
   }
-  if (!/^[0-9]{10,15}$/.test(val)) {
+  if (!/^[0-9]{10,15}$/.test(val)) {  // 10-15 digit
     notelpError.style.display = 'block';
-  } else {
-    notelpError.style.display = 'none';
+    return false;
   }
+  notelpError.style.display = 'none';
+  return true;
 }
-notelp.addEventListener('input', cekNoTelp);
+notelp.addEventListener('input', validasiFormatNoTelp);
 
-/* ---------- VALIDASI NIK ---------- */
-const nik = document.getElementById('nik');
+/* ---------------------------------------------------------
+   2. VALIDASI FORMAT NIK (16 digit)
+   --------------------------------------------------------- */
+const nik      = document.getElementById('nik');
 const nikError = document.getElementById('nikError');
 
-function cekNik() {
+function validasiFormatNIK() {
   const val = nik.value.trim();
-  if (val.length === 0) {
+  if (!val) {
     nikError.style.display = 'none';
-    return;
+    return true;
   }
   if (!/^\d{16}$/.test(val)) {
     nikError.style.display = 'block';
-  } else {
-    nikError.style.display = 'none';
+    return false;
   }
+  nikError.style.display = 'none';
+  return true;
 }
-nik.addEventListener('input', cekNik);
+nik.addEventListener('input', validasiFormatNIK);
 
+/* cegah submit kalau NIK salah */
 document.querySelector('form')?.addEventListener('submit', e => {
-  if (!/^\d{16}$/.test(nik.value.trim())) {
+  if (!validasiFormatNIK()) {
     e.preventDefault();
     nik.focus();
-    cekNik();
   }
 });
 
-/* ---------- CEK NOTELP (UTAMA) ---------- */
-function cekNoTelp() {            // eslint-disable-line no-func-assign
-  const notelpVal = notelp.value.trim();
-  if (!notelpVal) { 
-    alert('Masukkan No Telp dulu.'); 
-    return; 
+/* ---------------------------------------------------------
+   3. CEK DATA BERDASARKAN NO-TELEPON (FETCH) 
+      --> baru dijalankan saat tombol "Cek No Telp" diklik
+   --------------------------------------------------------- */
+function cekNoTelp() {                 // dipanggil onclick di HTML
+  if (!validasiFormatNoTelp()) {
+    alert('Nomor telepon tidak valid.');
+    return;
   }
 
+  const notelpVal = notelp.value.trim();
   fetch(`${scriptURL}?notelp=${notelpVal}`)
     .then(r => r.json())
     .then(data => {
-      const box   = document.getElementById('dataLama');
-      const regBox= document.getElementById('telahRegistrasi');
-      const submit= document.getElementById('submitBtn');
+      const box    = document.getElementById('dataLama');
+      const regBox = document.getElementById('telahRegistrasi');
+      const submit = document.getElementById('submitBtn');
 
       if (data.found) {
-        box.style.display = 'block';
-        document.getElementById('nama').value     = data.nama;
-        document.getElementById('instansi').value = data.instansi;
-        document.getElementById('email').value    = data.email;
-        document.getElementById('nik').value      = data.nik;
-        document.getElementById('profesi').value  = data.profesi;
+        // isi form otomatis
+        document.getElementById('nama').value      = data.nama;
+        document.getElementById('instansi').value  = data.instansi;
+        document.getElementById('email').value     = data.email;
+        document.getElementById('nik').value       = data.nik;
+        document.getElementById('profesi').value   = data.profesi;
         document.getElementById('keterangan').value= data.keterangan;
+
+        box.style.display = 'block';
 
         if (data.keterangan === 'Telah Terima Symposium Kit (E-Toll)') {
           regBox.style.display = 'block';
@@ -80,11 +95,12 @@ function cekNoTelp() {            // eslint-disable-line no-func-assign
           submit.style.cursor = '';
         }
       } else {
-        box.style.display   = 'none';
-        regBox.style.display= 'none';
-        submit.disabled     = false;
+        // tidak ditemukan
+        box.style.display    = 'none';
+        regBox.style.display = 'none';
+        submit.disabled      = false;
         submit.style.background = '';
-        submit.style.cursor = '';
+        submit.style.cursor  = '';
         alert('Data tidak ditemukan, silakan isi lengkap.');
       }
     })
@@ -94,12 +110,15 @@ function cekNoTelp() {            // eslint-disable-line no-func-assign
     });
 }
 
-/* ---------- SUBMIT ---------- */
+/* ---------------------------------------------------------
+   4. PROSES SUBMIT (INSERT / UPDATE)
+   --------------------------------------------------------- */
 document.getElementById('formRegistrasi').addEventListener('submit', function (e) {
   e.preventDefault();
 
   const keterangan = document.getElementById('keterangan').value;
   if (keterangan === 'Telah Terima Symposium Kit (E-Toll)') {
+    // double-check apakah memang belum pernah ambil kit
     const notelpVal = notelp.value.trim();
     fetch(`${scriptURL}?notelp=${notelpVal}`)
       .then(r => r.json())
@@ -108,17 +127,18 @@ document.getElementById('formRegistrasi').addEventListener('submit', function (e
           alert('TIDAK DAPAT REGISTRASI ULANG - Sudah menerima Symposium Kit');
           return;
         }
-        prosesSubmit();
+        kirimData();
       });
   } else {
-    prosesSubmit();
+    kirimData();
   }
 });
 
-function prosesSubmit() {
+function kirimData() {
   const wrap = document.getElementById('progressWrap');
   const bar  = document.getElementById('progressBar');
   const msg  = document.getElementById('msgSukses');
+
   wrap.style.display = 'block';
   bar.style.width = '0%';
 
@@ -146,9 +166,9 @@ function prosesSubmit() {
     });
 }
 
-/* ---------- REFRESH ---------- */
+/* ---------------------------------------------------------
+   5. TOMBOL REFRESH
+   --------------------------------------------------------- */
 document.getElementById('btnInputKembali').addEventListener('click', () => {
   location.reload();
 });
-
-/* >>> SCAN KTP & TESSERACT SAMA SEKALI DIHAPUS <<< */
