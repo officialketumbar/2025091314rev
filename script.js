@@ -2,7 +2,7 @@
    REGISTRASI ULANG SIMPSIUM - VERSI TANPA SCAN KTP
    ========================================================= */
 const scriptURL =
-  'https://script.google.com/macros/s/AKfycbxVFjOG6KQ3ya--uQ5FMRxfLUcVo9U5NB4ls6i3U3hM2HLHQDvEOuYN3FMwfOWVk00rzQ/exec'; // <-- GANTI DG MILIK ANDA
+  'https://script.google.com/macros/s/AKfycbwyPZyxNub1BbtxrFy0Pp2EaG42EZcr83-3gwcKVaFirw_AOeQNbyfWXRlbl5N3KKWC/exec'; // <-- GANTI DG MILIK ANDA
 
 /* ---------------------------------------------------------
    1. VALIDASI FORMAT NO-TELEPON (hanya UI, tanpa fetch)
@@ -55,19 +55,7 @@ document.querySelector('form')?.addEventListener('submit', e => {
 });
 
 /* ---------------------------------------------------------
-   3. POPUP SUDAH TERIMA KIT
-   --------------------------------------------------------- */
-function popupSudahKit() {
-  Swal.fire({
-    icon : 'info',
-    title: 'Registrasi Ulang Selesai',
-    text : 'Peserta telah Registrasi Ulang dan Telah menerima Symposium Kit (E-Toll)',
-    confirmButtonColor: '#007BFF'
-  });
-}
-
-/* ---------------------------------------------------------
-   4. CEK DATA BERDASARKAN NO-TELEPON (FETCH) 
+   3. CEK DATA BERDASARKAN NO-TELEPON (FETCH) 
       --> baru dijalankan saat tombol "Cek No Telp" diklik
    --------------------------------------------------------- */
 function cekNoTelp() {                 // dipanggil onclick di HTML
@@ -100,10 +88,6 @@ function cekNoTelp() {                 // dipanggil onclick di HTML
           submit.disabled = true;
           submit.style.background = '#ccc';
           submit.style.cursor = 'not-allowed';
-
-          // ===== POPUP DISINI =====
-          popupSudahKit();
-          // =========================
         } else {
           regBox.style.display = 'none';
           submit.disabled = false;
@@ -127,7 +111,7 @@ function cekNoTelp() {                 // dipanggil onclick di HTML
 }
 
 /* ---------------------------------------------------------
-   5. PROSES SUBMIT (INSERT / UPDATE)
+   4. PROSES SUBMIT (INSERT / UPDATE)
    --------------------------------------------------------- */
 document.getElementById('formRegistrasi').addEventListener('submit', function (e) {
   e.preventDefault();
@@ -183,8 +167,11 @@ function kirimData() {
 }
 
 /* ---------------------------------------------------------
-   6. TOMBOL REFRESH
+   5. TOMBOL REFRESH
    --------------------------------------------------------- */
 document.getElementById('btnInputKembali').addEventListener('click', () => {
   location.reload();
 });
+
+
+
